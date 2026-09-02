@@ -23,7 +23,7 @@ repository               : "peterfortin/peterfortin.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profile.png"
+  avatar           : "profile.jpg"
   name             : "Peter Fortin"
   pronouns         : # example: "she/her"  
   bio              : "Graduate Student in Philosophy"
