@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Graduate student and researcher"
+title: "Graduate Student and Researcher"
 author_profile: true
 redirect_from: 
   - /about/
