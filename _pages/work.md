@@ -5,13 +5,13 @@ permalink: /work/
 author_profile: true
 ---
 
--- ## Books
+<!-- ## Books -->
 
--- ## Papers
+<!-- ## Papers -->
 
 ## Theses and Dissertations
 
-* []() Undergraduate senior thesis, supervised by Keith McPartland at Williams College, highest departmental honors.
+* [Propositional Structure and Higher-Order Metaphysics](/files/SeniorThesis.pdf), undergraduate senior thesis, supervised by Keith McPartland at Williams College.
 
--- ## Notes
+<!-- ## Notes -->
 
