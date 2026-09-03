@@ -1,7 +1,7 @@
 ---
 layout: single
-title: "Work"
-permalink: /work/
+title: "Writing"
+permalink: /writing/
 author_profile: true
 ---
 
