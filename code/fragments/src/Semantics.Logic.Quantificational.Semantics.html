@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html"><span class="hs-identifier">Semantics.Logic.Quantificational.Semantics</span></a></span><span>
+</span><span id="line-2"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-comment">-- * Model Structure</span></span><span>
+</span><span id="line-3"></span><span>      </span><span class="annot"><span class="hs-comment">-- ** Domain</span></span><span>
+</span><span id="line-4"></span><span>      </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Domain"><span class="hs-identifier">Domain</span></a></span><span>
+</span><span id="line-5"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#createDomain"><span class="hs-identifier">createDomain</span></a></span><span>
+</span><span id="line-6"></span><span>      </span><span class="annot"><span class="hs-comment">-- ** Relations</span></span><span>
+</span><span id="line-7"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#RelationalTuples"><span class="hs-identifier">RelationalTuples</span></a></span><span>
+</span><span id="line-8"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#createRelationalTuple"><span class="hs-identifier">createRelationalTuple</span></a></span><span>
+</span><span id="line-9"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Relations"><span class="hs-identifier">Relations</span></a></span><span>
+</span><span id="line-10"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#createRelations"><span class="hs-identifier">createRelations</span></a></span><span>
+</span><span id="line-11"></span><span>      </span><span class="annot"><span class="hs-comment">-- ** Interpretation</span></span><span>
+</span><span id="line-12"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Interpretation"><span class="hs-identifier">Interpretation</span></a></span><span>
+</span><span id="line-13"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#createInterpretation"><span class="hs-identifier">createInterpretation</span></a></span><span>
+</span><span id="line-14"></span><span>      </span><span class="annot"><span class="hs-comment">-- * Evaluation</span></span><span>
+</span><span id="line-15"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier">evaluateIn</span></a></span><span>
+</span><span id="line-16"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html"><span class="hs-identifier">Semantics.Logic.Quantificational.Syntax</span></a></span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#QuantificationalTerm"><span class="hs-identifier">QuantificationalTerm</span></a></span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#QuantificationalFormula"><span class="hs-identifier">QuantificationalFormula</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Set</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Set</span></span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Set</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Set</span></span><span>
+</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Map</span></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="annot"><span class="hs-comment">-- | A domain is a set of entities.</span></span><span>
+</span><span id="line-30"></span><span class="hs-keyword">type</span><span> </span><span id="Domain"><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Domain"><span class="hs-identifier hs-var">Domain</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Set</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- | Create a domain.</span></span><span>
+</span><span id="line-33"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#createDomain"><span class="hs-identifier hs-type">createDomain</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Domain"><span class="hs-identifier hs-type">Domain</span></a></span><span>
+</span><span id="line-34"></span><span id="createDomain"><span class="annot"><span class="annottext">createDomain :: [String] -&gt; Domain
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#createDomain"><span class="hs-identifier hs-var hs-var">createDomain</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; Domain
+forall a. Ord a =&gt; [a] -&gt; Set a
+</span><span class="hs-identifier hs-var">Set.fromList</span></span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="annot"><span class="hs-comment">-- | A relational tuple is a set of lists of quantificational terms</span></span><span>
+</span><span id="line-38"></span><span class="hs-keyword">type</span><span> </span><span id="RelationalTuples"><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#RelationalTuples"><span class="hs-identifier hs-var">RelationalTuples</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Set</span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#QuantificationalTerm"><span class="hs-identifier hs-type">QuantificationalTerm</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="annot"><span class="hs-comment">-- | Create a RelationalTuple</span></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#createRelationalTuple"><span class="hs-identifier hs-type">createRelationalTuple</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#QuantificationalTerm"><span class="hs-identifier hs-type">QuantificationalTerm</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#RelationalTuples"><span class="hs-identifier hs-type">RelationalTuples</span></a></span><span>
+</span><span id="line-42"></span><span id="createRelationalTuple"><span class="annot"><span class="annottext">createRelationalTuple :: [[String]] -&gt; RelationalTuples
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#createRelationalTuple"><span class="hs-identifier hs-var hs-var">createRelationalTuple</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[String]] -&gt; RelationalTuples
+forall a. Ord a =&gt; [a] -&gt; Set a
+</span><span class="hs-identifier hs-var">Set.fromList</span></span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="annot"><span class="hs-comment">-- | Relations are the collections of objects satisfying them.</span></span><span>
+</span><span id="line-46"></span><span class="hs-keyword">type</span><span> </span><span id="Relations"><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Relations"><span class="hs-identifier hs-var">Relations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Map</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#RelationalTuples"><span class="hs-identifier hs-type">RelationalTuples</span></a></span><span>
+</span><span id="line-47"></span><span>
+</span><span id="line-48"></span><span class="annot"><span class="hs-comment">-- | Create a collection of relations.</span></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#createRelations"><span class="hs-identifier hs-type">createRelations</span></a></span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#RelationalTuples"><span class="hs-identifier hs-type">RelationalTuples</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Relations"><span class="hs-identifier hs-type">Relations</span></a></span><span>
+</span><span id="line-50"></span><span id="createRelations"><span class="annot"><span class="annottext">createRelations :: [(String, RelationalTuples)] -&gt; Relations
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#createRelations"><span class="hs-identifier hs-var hs-var">createRelations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(String, RelationalTuples)] -&gt; Relations
+forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
+</span><span class="hs-identifier hs-var">Map.fromList</span></span><span>
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="annot"><span class="hs-comment">-- | An interpretation is a domain and a collection of relations on it.</span></span><span>
+</span><span id="line-54"></span><span class="hs-keyword">type</span><span> </span><span id="Interpretation"><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Interpretation"><span class="hs-identifier hs-var">Interpretation</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Domain"><span class="hs-identifier hs-type">Domain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Relations"><span class="hs-identifier hs-type">Relations</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span class="annot"><span class="hs-comment">-- | Create an interpretation.</span></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#createInterpretation"><span class="hs-identifier hs-type">createInterpretation</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Domain"><span class="hs-identifier hs-type">Domain</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Relations"><span class="hs-identifier hs-type">Relations</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Interpretation"><span class="hs-identifier hs-type">Interpretation</span></a></span><span>
+</span><span id="line-58"></span><span id="createInterpretation"><span class="annot"><span class="annottext">createInterpretation :: Domain -&gt; Relations -&gt; Interpretation
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#createInterpretation"><span class="hs-identifier hs-var hs-var">createInterpretation</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">,</span><span class="hs-special">)</span><span>
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span><span class="hs-comment">-- | Evaluate the truth of a closed formula in an interpretation.</span><span>
+</span><span id="line-62"></span><span class="hs-comment">--</span><span>
+</span><span id="line-63"></span><span class="hs-comment">-- Let i be an interpretation with domain Laura, BOB, and Cooper,</span><span>
+</span><span id="line-64"></span><span class="hs-comment">-- and relations</span><span>
+</span><span id="line-65"></span><span class="hs-comment">--</span><span>
+</span><span id="line-66"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-67"></span><span class="hs-comment">-- InTheBlackLodge    = {Laura, BOB}</span><span>
+</span><span id="line-68"></span><span class="hs-comment">-- InGlastonburyGrove = {Cooper}</span><span>
+</span><span id="line-69"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-70"></span><span class="hs-comment">--</span><span>
+</span><span id="line-71"></span><span class="hs-comment">-- then </span><span>
+</span><span id="line-72"></span><span class="hs-comment">--</span><span>
+</span><span id="line-73"></span><span class="hs-comment">-- &gt;&gt;&gt; evaluateIn (Universal $ \x -&gt; (Disjunction (Predicate &quot;InTheBlackLodge&quot; [x]) (Equality x &quot;Cooper&quot;))) i</span><span>
+</span><span id="line-74"></span><span class="hs-comment">-- True</span><span>
+</span><span id="line-75"></span><span class="hs-comment">--</span><span>
+</span><span id="line-76"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-type">evaluateIn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#QuantificationalFormula"><span class="hs-identifier hs-type">QuantificationalFormula</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#Interpretation"><span class="hs-identifier hs-type">Interpretation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-77"></span><span id="evaluateIn"><span class="annot"><span class="annottext">evaluateIn :: QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var hs-var">evaluateIn</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#Predicate"><span class="hs-identifier hs-type">Predicate</span></a></span><span> </span><span id="local-6989586621679049577"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049577"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679049578"><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679049578"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">)</span><span>   </span><span id="local-6989586621679049579"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049579"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049577"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Relations -&gt; Bool
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Bool
+</span><span class="hs-operator hs-var">`Map.member`</span></span><span> </span><span class="annot"><span class="annottext">Interpretation -&gt; Relations
+forall a b. (a, b) -&gt; b
+</span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049579"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679049578"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; RelationalTuples -&gt; Bool
+forall a. Ord a =&gt; a -&gt; Set a -&gt; Bool
+</span><span class="hs-operator hs-var">`Set.member`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Interpretation -&gt; Relations
+forall a b. (a, b) -&gt; b
+</span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049579"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Relations -&gt; String -&gt; RelationalTuples
+forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
+</span><span class="hs-operator hs-var">Map.!</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049577"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-78"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#Equality"><span class="hs-identifier hs-type">Equality</span></a></span><span> </span><span id="local-6989586621679049586"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049586"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679049587"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049587"><span class="hs-identifier hs-var">t2</span></a></span></span><span class="hs-special">)</span><span>  </span><span id="local-6989586621679049588"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049588"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049586"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Domain -&gt; Bool
+forall a. Ord a =&gt; a -&gt; Set a -&gt; Bool
+</span><span class="hs-operator hs-var">`Set.member`</span></span><span> </span><span class="annot"><span class="annottext">Interpretation -&gt; Domain
+forall a b. (a, b) -&gt; a
+</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049588"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049587"><span class="hs-identifier hs-var">t2</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; Domain -&gt; Bool
+forall a. Ord a =&gt; a -&gt; Set a -&gt; Bool
+</span><span class="hs-operator hs-var">`Set.member`</span></span><span> </span><span class="annot"><span class="annottext">Interpretation -&gt; Domain
+forall a b. (a, b) -&gt; a
+</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049588"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049586"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679049587"><span class="hs-identifier hs-var">t2</span></a></span><span>
+</span><span id="line-79"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#Negation"><span class="hs-identifier hs-type">Negation</span></a></span><span> </span><span id="local-6989586621679049591"><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049591"><span class="hs-identifier hs-var">p</span></a></span></span><span class="hs-special">)</span><span>      </span><span id="local-6989586621679049592"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049592"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049591"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049592"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#Conjunction"><span class="hs-identifier hs-type">Conjunction</span></a></span><span> </span><span id="local-6989586621679049595"><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049595"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679049596"><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049596"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679049597"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049597"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049595"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049597"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049596"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049597"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-81"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#Disjunction"><span class="hs-identifier hs-type">Disjunction</span></a></span><span> </span><span id="local-6989586621679049599"><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049599"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679049600"><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049600"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679049601"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049601"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049599"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049601"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">||</span></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049600"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049601"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-82"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#Implication"><span class="hs-identifier hs-type">Implication</span></a></span><span> </span><span id="local-6989586621679049604"><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049604"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679049605"><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049605"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679049606"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049606"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049604"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049606"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">||</span></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">QuantificationalFormula
+</span><a href="#local-6989586621679049605"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049606"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-83"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#Universal"><span class="hs-identifier hs-type">Universal</span></a></span><span> </span><span id="local-6989586621679049608"><span class="annot"><span class="annottext">String -&gt; QuantificationalFormula
+</span><a href="#local-6989586621679049608"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>     </span><span id="local-6989586621679049609"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049609"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Bool) -&gt; [String] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-operator hs-var">`evaluateIn`</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049609"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(QuantificationalFormula -&gt; Bool)
+-&gt; (String -&gt; QuantificationalFormula) -&gt; String -&gt; Bool
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; QuantificationalFormula
+</span><a href="#local-6989586621679049608"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Domain -&gt; [String]
+forall a. Set a -&gt; [a]
+</span><span class="hs-identifier hs-var">Set.toList</span></span><span> </span><span class="annot"><span class="annottext">(Domain -&gt; [String]) -&gt; Domain -&gt; [String]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Interpretation -&gt; Domain
+forall a b. (a, b) -&gt; a
+</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049609"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-84"></span><span class="annot"><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Quantificational.Syntax.html#Existential"><span class="hs-identifier hs-type">Existential</span></a></span><span> </span><span id="local-6989586621679049614"><span class="annot"><span class="annottext">String -&gt; QuantificationalFormula
+</span><a href="#local-6989586621679049614"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">)</span><span>   </span><span id="local-6989586621679049615"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049615"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Bool) -&gt; [String] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantificationalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Quantificational.Semantics.html#evaluateIn"><span class="hs-operator hs-var">`evaluateIn`</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049615"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(QuantificationalFormula -&gt; Bool)
+-&gt; (String -&gt; QuantificationalFormula) -&gt; String -&gt; Bool
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; QuantificationalFormula
+</span><a href="#local-6989586621679049614"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Domain -&gt; [String]
+forall a. Set a -&gt; [a]
+</span><span class="hs-identifier hs-var">Set.toList</span></span><span> </span><span class="annot"><span class="annottext">(Domain -&gt; [String]) -&gt; Domain -&gt; [String]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Interpretation -&gt; Domain
+forall a b. (a, b) -&gt; a
+</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049615"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span></pre></body></html>

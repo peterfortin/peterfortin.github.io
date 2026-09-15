@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">{-|
+This is the &quot;internal&quot; module for propositional logic semantics. See the main Semantics.Logic.Propositional module 
+for an explanation of what is going on.
+-}</span></span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html"><span class="hs-identifier">Semantics.Logic.Propositional.Semantics</span></a></span><span>
+</span><span id="line-7"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-comment">-- * Model Structure</span></span><span>
+</span><span id="line-8"></span><span>      </span><span class="annot"><span class="hs-comment">-- ** Interpretation</span></span><span>
+</span><span id="line-9"></span><span>      </span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#Interpretation"><span class="hs-identifier">Interpretation</span></a></span><span>
+</span><span id="line-10"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#createInterpretation"><span class="hs-identifier">createInterpretation</span></a></span><span>
+</span><span id="line-11"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-comment">-- * Evaluation</span></span><span>
+</span><span id="line-12"></span><span>      </span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier">evaluateIn</span></a></span><span>
+</span><span id="line-13"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Set</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Set</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Set</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Set</span></span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html"><span class="hs-identifier">Semantics.Logic.Propositional.Syntax</span></a></span><span> </span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalVariable"><span class="hs-identifier">PropositionalVariable</span></a></span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier">PropositionalFormula</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><span class="hs-comment">-- | An interpretation for a boolean logic is the set of the propositional variables which are true.</span></span><span>
+</span><span id="line-24"></span><span class="hs-keyword">type</span><span> </span><span id="Interpretation"><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#Interpretation"><span class="hs-identifier hs-var">Interpretation</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Set</span></span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalVariable"><span class="hs-identifier hs-type">PropositionalVariable</span></a></span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="annot"><span class="hs-comment">-- | Create an interpretation.</span></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#createInterpretation"><span class="hs-identifier hs-type">createInterpretation</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalVariable"><span class="hs-identifier hs-type">PropositionalVariable</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#Interpretation"><span class="hs-identifier hs-type">Interpretation</span></a></span><span>
+</span><span id="line-28"></span><span id="createInterpretation"><span class="annot"><span class="annottext">createInterpretation :: [PropositionalVariable] -&gt; Interpretation
+</span><a href="Semantics.Logic.Propositional.Semantics.html#createInterpretation"><span class="hs-identifier hs-var hs-var">createInterpretation</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[PropositionalVariable] -&gt; Interpretation
+forall a. Ord a =&gt; [a] -&gt; Set a
+</span><span class="hs-identifier hs-var">Set.fromList</span></span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="hs-comment">-- | Evaluate a propositional formula in an interpretation.</span><span>
+</span><span id="line-32"></span><span class="hs-comment">--</span><span>
+</span><span id="line-33"></span><span class="hs-comment">-- Let i be an interpretation such that </span><span>
+</span><span id="line-34"></span><span class="hs-comment">--</span><span>
+</span><span id="line-35"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-36"></span><span class="hs-comment">-- i &quot;a&quot; -&gt; True</span><span>
+</span><span id="line-37"></span><span class="hs-comment">-- i &quot;b&quot; -&gt; False</span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- i &quot;c&quot; -&gt; True</span><span>
+</span><span id="line-39"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-40"></span><span class="hs-comment">--</span><span>
+</span><span id="line-41"></span><span class="hs-comment">-- Then</span><span>
+</span><span id="line-42"></span><span class="hs-comment">-- </span><span>
+</span><span id="line-43"></span><span class="hs-comment">-- &gt;&gt;&gt; evaluateIn (Negation (Implication (Disjunction (Atomic &quot;a&quot;) (Conjunction (Negation (Atomic &quot;b&quot;)) (Atomic &quot;c&quot;))) (Atomic &quot;b&quot;))) i</span><span>
+</span><span id="line-44"></span><span class="hs-comment">-- True</span><span>
+</span><span id="line-45"></span><span class="hs-comment">--</span><span>
+</span><span id="line-46"></span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-type">evaluateIn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-type">PropositionalFormula</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#Interpretation"><span class="hs-identifier hs-type">Interpretation</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-47"></span><span id="evaluateIn"><span class="annot"><span class="annottext">evaluateIn :: PropositionalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var hs-var">evaluateIn</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Atomic"><span class="hs-identifier hs-type">Atomic</span></a></span><span> </span><span id="local-6989586621679049218"><span class="annot"><span class="annottext">PropositionalVariable
+</span><a href="#local-6989586621679049218"><span class="hs-identifier hs-var">p</span></a></span></span><span class="hs-special">)</span><span>        </span><span id="local-6989586621679049219"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049219"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PropositionalVariable
+</span><a href="#local-6989586621679049218"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">PropositionalVariable -&gt; Interpretation -&gt; Bool
+forall a. Ord a =&gt; a -&gt; Set a -&gt; Bool
+</span><span class="hs-operator hs-var">`Set.member`</span></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049219"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Negation"><span class="hs-identifier hs-type">Negation</span></a></span><span> </span><span id="local-6989586621679049222"><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049222"><span class="hs-identifier hs-var">p</span></a></span></span><span class="hs-special">)</span><span>      </span><span id="local-6989586621679049223"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049223"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PropositionalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049222"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049223"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Conjunction"><span class="hs-identifier hs-type">Conjunction</span></a></span><span> </span><span id="local-6989586621679049226"><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049226"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679049227"><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049227"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679049228"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049228"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PropositionalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049226"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049228"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049227"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049228"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-50"></span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Disjunction"><span class="hs-identifier hs-type">Disjunction</span></a></span><span> </span><span id="local-6989586621679049231"><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049231"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679049232"><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049232"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679049233"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049233"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PropositionalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049231"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049233"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">||</span></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049232"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049233"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Implication"><span class="hs-identifier hs-type">Implication</span></a></span><span> </span><span id="local-6989586621679049236"><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049236"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679049237"><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049237"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679049238"><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049238"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PropositionalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049236"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049238"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">||</span></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula -&gt; Interpretation -&gt; Bool
+</span><a href="Semantics.Logic.Propositional.Semantics.html#evaluateIn"><span class="hs-identifier hs-var">evaluateIn</span></a></span><span> </span><span class="annot"><span class="annottext">PropositionalFormula
+</span><a href="#local-6989586621679049237"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Interpretation
+</span><a href="#local-6989586621679049238"><span class="hs-identifier hs-var">i</span></a></span></pre></body></html>

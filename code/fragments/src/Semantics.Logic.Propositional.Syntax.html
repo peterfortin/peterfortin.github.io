@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">{-|
+This is the &quot;internal&quot; module for propositional logic syntax. See the main Semantics.Logic.Propositional module 
+for an explanation of what is going on.
+-}</span></span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html"><span class="hs-identifier">Semantics.Logic.Propositional.Syntax</span></a></span><span>
+</span><span id="line-7"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-comment">-- * Abstract Syntax</span></span><span>
+</span><span id="line-8"></span><span>      </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalVariable"><span class="hs-identifier">PropositionalVariable</span></a></span><span> </span><span>
+</span><span id="line-9"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier">PropositionalFormula</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- | A propositional variable is a name.</span></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">type</span><span> </span><span id="PropositionalVariable"><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalVariable"><span class="hs-identifier hs-var">PropositionalVariable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><span class="hs-comment">-- | A propositional formula is a well formed abstract syntax tree encoding its logical form.</span></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">data</span><span> </span><span id="PropositionalFormula"><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-var">PropositionalFormula</span></a></span></span><span>
+</span><span id="line-17"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="Atomic"><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Atomic"><span class="hs-identifier hs-var">Atomic</span></a></span></span><span>      </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalVariable"><span class="hs-identifier hs-type">PropositionalVariable</span></a></span><span>
+</span><span id="line-18"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Negation"><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Negation"><span class="hs-identifier hs-var">Negation</span></a></span></span><span>    </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-type">PropositionalFormula</span></a></span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Conjunction"><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Conjunction"><span class="hs-identifier hs-var">Conjunction</span></a></span></span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-type">PropositionalFormula</span></a></span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-type">PropositionalFormula</span></a></span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Disjunction"><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Disjunction"><span class="hs-identifier hs-var">Disjunction</span></a></span></span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-type">PropositionalFormula</span></a></span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-type">PropositionalFormula</span></a></span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Implication"><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#Implication"><span class="hs-identifier hs-var">Implication</span></a></span></span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-type">PropositionalFormula</span></a></span><span> </span><span class="annot"><a href="Semantics.Logic.Propositional.Syntax.html#PropositionalFormula"><span class="hs-identifier hs-type">PropositionalFormula</span></a></span><span>
+</span><span id="line-22"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679049108"><span id="local-6989586621679049124"><span class="annot"><span class="annottext">PropositionalFormula -&gt; PropositionalFormula -&gt; Bool
+(PropositionalFormula -&gt; PropositionalFormula -&gt; Bool)
+-&gt; (PropositionalFormula -&gt; PropositionalFormula -&gt; Bool)
+-&gt; Eq PropositionalFormula
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: PropositionalFormula -&gt; PropositionalFormula -&gt; Bool
+== :: PropositionalFormula -&gt; PropositionalFormula -&gt; Bool
+$c/= :: PropositionalFormula -&gt; PropositionalFormula -&gt; Bool
+/= :: PropositionalFormula -&gt; PropositionalFormula -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679049129"><span id="local-6989586621679049148"><span id="local-6989586621679049151"><span class="annot"><span class="annottext">Int -&gt; PropositionalFormula -&gt; ShowS
+[PropositionalFormula] -&gt; ShowS
+PropositionalFormula -&gt; PropositionalVariable
+(Int -&gt; PropositionalFormula -&gt; ShowS)
+-&gt; (PropositionalFormula -&gt; PropositionalVariable)
+-&gt; ([PropositionalFormula] -&gt; ShowS)
+-&gt; Show PropositionalFormula
+forall a.
+(Int -&gt; a -&gt; ShowS)
+-&gt; (a -&gt; PropositionalVariable) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; PropositionalFormula -&gt; ShowS
+showsPrec :: Int -&gt; PropositionalFormula -&gt; ShowS
+$cshow :: PropositionalFormula -&gt; PropositionalVariable
+show :: PropositionalFormula -&gt; PropositionalVariable
+$cshowList :: [PropositionalFormula] -&gt; ShowS
+showList :: [PropositionalFormula] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679049157"><span id="local-6989586621679049161"><span id="local-6989586621679049164"><span id="local-6989586621679049195"><span class="annot"><span class="annottext">ReadPrec [PropositionalFormula]
+ReadPrec PropositionalFormula
+Int -&gt; ReadS PropositionalFormula
+ReadS [PropositionalFormula]
+(Int -&gt; ReadS PropositionalFormula)
+-&gt; ReadS [PropositionalFormula]
+-&gt; ReadPrec PropositionalFormula
+-&gt; ReadPrec [PropositionalFormula]
+-&gt; Read PropositionalFormula
+forall a.
+(Int -&gt; ReadS a)
+-&gt; ReadS [a] -&gt; ReadPrec a -&gt; ReadPrec [a] -&gt; Read a
+$creadsPrec :: Int -&gt; ReadS PropositionalFormula
+readsPrec :: Int -&gt; ReadS PropositionalFormula
+$creadList :: ReadS [PropositionalFormula]
+readList :: ReadS [PropositionalFormula]
+$creadPrec :: ReadPrec PropositionalFormula
+readPrec :: ReadPrec PropositionalFormula
+$creadListPrec :: ReadPrec [PropositionalFormula]
+readListPrec :: ReadPrec [PropositionalFormula]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">)</span></pre></body></html>

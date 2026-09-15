@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">{-|
+This is the &quot;internal&quot; module for propositional modal logic syntax. See the main Semantics.Logic.PropositionalModal module 
+for an explanation of what is going on.
+-}</span></span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html"><span class="hs-identifier">Semantics.Logic.PropositionalModal.Syntax</span></a></span><span>
+</span><span id="line-7"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-comment">-- * Abstract Syntax</span></span><span>
+</span><span id="line-8"></span><span>      </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalVariable"><span class="hs-identifier">PropositionalVariable</span></a></span><span>
+</span><span id="line-9"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier">PropositionalModalFormula</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- | A PropositionalVariable is a name.</span></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">type</span><span> </span><span id="PropositionalVariable"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalVariable"><span class="hs-identifier hs-var">PropositionalVariable</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><span class="hs-comment">-- | A propositional modal formula is a well formed abstract syntax tree encoding its logical form.</span></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">data</span><span> </span><span id="PropositionalModalFormula"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-var">PropositionalModalFormula</span></a></span></span><span>
+</span><span id="line-17"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="Atomic"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#Atomic"><span class="hs-identifier hs-var">Atomic</span></a></span></span><span>      </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalVariable"><span class="hs-identifier hs-type">PropositionalVariable</span></a></span><span> </span><span>
+</span><span id="line-18"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Negation"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#Negation"><span class="hs-identifier hs-var">Negation</span></a></span></span><span>    </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Conjunction"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#Conjunction"><span class="hs-identifier hs-var">Conjunction</span></a></span></span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Disjunction"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#Disjunction"><span class="hs-identifier hs-var">Disjunction</span></a></span></span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Implication"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#Implication"><span class="hs-identifier hs-var">Implication</span></a></span></span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span>
+</span><span id="line-22"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Necessity"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#Necessity"><span class="hs-identifier hs-var">Necessity</span></a></span></span><span>   </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span>
+</span><span id="line-23"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="Possibility"><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#Possibility"><span class="hs-identifier hs-var">Possibility</span></a></span></span><span> </span><span class="annot"><a href="Semantics.Logic.PropositionalModal.Syntax.html#PropositionalModalFormula"><span class="hs-identifier hs-type">PropositionalModalFormula</span></a></span><span>
+</span><span id="line-24"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679049270"><span id="local-6989586621679049288"><span class="annot"><span class="annottext">PropositionalModalFormula -&gt; PropositionalModalFormula -&gt; Bool
+(PropositionalModalFormula -&gt; PropositionalModalFormula -&gt; Bool)
+-&gt; (PropositionalModalFormula -&gt; PropositionalModalFormula -&gt; Bool)
+-&gt; Eq PropositionalModalFormula
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: PropositionalModalFormula -&gt; PropositionalModalFormula -&gt; Bool
+== :: PropositionalModalFormula -&gt; PropositionalModalFormula -&gt; Bool
+$c/= :: PropositionalModalFormula -&gt; PropositionalModalFormula -&gt; Bool
+/= :: PropositionalModalFormula -&gt; PropositionalModalFormula -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679049293"><span id="local-6989586621679049316"><span id="local-6989586621679049319"><span class="annot"><span class="annottext">Int -&gt; PropositionalModalFormula -&gt; ShowS
+[PropositionalModalFormula] -&gt; ShowS
+PropositionalModalFormula -&gt; PropositionalVariable
+(Int -&gt; PropositionalModalFormula -&gt; ShowS)
+-&gt; (PropositionalModalFormula -&gt; PropositionalVariable)
+-&gt; ([PropositionalModalFormula] -&gt; ShowS)
+-&gt; Show PropositionalModalFormula
+forall a.
+(Int -&gt; a -&gt; ShowS)
+-&gt; (a -&gt; PropositionalVariable) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; PropositionalModalFormula -&gt; ShowS
+showsPrec :: Int -&gt; PropositionalModalFormula -&gt; ShowS
+$cshow :: PropositionalModalFormula -&gt; PropositionalVariable
+show :: PropositionalModalFormula -&gt; PropositionalVariable
+$cshowList :: [PropositionalModalFormula] -&gt; ShowS
+showList :: [PropositionalModalFormula] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679049325"><span id="local-6989586621679049329"><span id="local-6989586621679049332"><span id="local-6989586621679049371"><span class="annot"><span class="annottext">ReadPrec [PropositionalModalFormula]
+ReadPrec PropositionalModalFormula
+Int -&gt; ReadS PropositionalModalFormula
+ReadS [PropositionalModalFormula]
+(Int -&gt; ReadS PropositionalModalFormula)
+-&gt; ReadS [PropositionalModalFormula]
+-&gt; ReadPrec PropositionalModalFormula
+-&gt; ReadPrec [PropositionalModalFormula]
+-&gt; Read PropositionalModalFormula
+forall a.
+(Int -&gt; ReadS a)
+-&gt; ReadS [a] -&gt; ReadPrec a -&gt; ReadPrec [a] -&gt; Read a
+$creadsPrec :: Int -&gt; ReadS PropositionalModalFormula
+readsPrec :: Int -&gt; ReadS PropositionalModalFormula
+$creadList :: ReadS [PropositionalModalFormula]
+readList :: ReadS [PropositionalModalFormula]
+$creadPrec :: ReadPrec PropositionalModalFormula
+readPrec :: ReadPrec PropositionalModalFormula
+$creadListPrec :: ReadPrec [PropositionalModalFormula]
+readListPrec :: ReadPrec [PropositionalModalFormula]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">)</span></pre></body></html>
