@@ -11,7 +11,7 @@ author_profile: true
 
 
 ## Libraries
-fragments - A Haskell library for natural language semantics. [\[docs\]](code/fragments)  [\[source\]](https://github.com/peterfortin/fragments)
+fragments - A Haskell library for natural language semantics. [\[docs\]](/fragments)  [\[source\]](https://github.com/peterfortin/fragments)
 
 
 
