@@ -16,6 +16,9 @@ fragments - A Haskell library for natural language semantics. [\[docs\]](/code/f
 
 
 <!-- ## Formalizations -->
+<!-- Lurie's proof of Makkai -->
+<!-- Theories of truth, Halbach's book, Kripkes theory and revision theory-->
+<!-- Logic library, prop, first, higher, modal + intuitionistic, proof theories?-->
 
 
 ## Compilers and Interpreters

@@ -3,8 +3,8 @@ permalink: /
 title: "Logic, Language, and Computation"
 author_profile: true
 redirect_from: 
-  - /about/
-  - /about.html
+  - /home/
+  - /home.html
 ---
 
 I am a graduate student currently pursuing an MPhil in philosophy at the University of Cambridge. Before this, I obtained a BA in 
